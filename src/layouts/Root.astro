@@ -1,0 +1,29 @@
+---
+import "@/styles.css";
+import HeadBase from "@/layouts/HeadBase.astro";
+import Navbar from "@/components/navbar/Navbar.astro";
+import Footer from "@/components/footer/Footer.astro";
+import SEO from "@/layouts/SEO.astro";
+import BodyScripts from "@/layouts/BodyScripts.astro";
+import type { SeoFieldsFragment } from "@/db/graphql";
+
+interface Props {
+  seo?: SeoFieldsFragment | null;
+}
+
+const { seo } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <HeadBase />
+    <SEO seo={seo} />
+  </head>
+  <body>
+    <Navbar />
+    <slot />
+    <Footer />
+    <BodyScripts />
+  </body>
+</html>

@@ -1,0 +1,19 @@
+---
+
+---
+
+<div class="min-h-[56px] w-full">
+  <div id="searchui" class="min-h-[56px] w-full"></div>
+</div>
+
+<script is:inline>
+  window.addEventListener("DOMContentLoaded", (_) => {
+    new PagefindUI({
+      element: "#searchui",
+      resetStyles: false,
+      debounceTimeoutMs: 50,
+      showImages: true,
+      showEmptyFilters: true,
+    });
+  });
+</script>

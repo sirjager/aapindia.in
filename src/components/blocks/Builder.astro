@@ -1,0 +1,36 @@
+---
+import type { PageResult } from "@/db/pages";
+import BlockPosts from "@/components/blocks/BlockPosts.astro";
+import BlockButton from "@/components/blocks/BlockButton.astro";
+import BlockContent from "@/components/blocks/BlockContent.astro";
+import type { SiteInfo } from "@/db/globals";
+
+interface Props {
+  path?: string;
+  blocks: PageResult["page"]["blocks"]
+  active?: number;
+  pagination?: boolean | null;
+  site?:SiteInfo
+}
+const { blocks, path, active, pagination,site } = Astro.props;
+---
+
+<div class="grid grid-cols-3 gap-2 @container sm:gap-3 md:gap-4 lg:gap-6">
+  {
+    blocks
+      ?.sort((a, b) => (a?.sort ?? 0) - (b?.sort ?? 0))
+      .map((b, index) => {
+        if (!b || !b.item) return null;
+        switch (b.item.__typename) {
+          case "block_button":
+            return <BlockButton key={index} block={[b]} />;
+          case "block_posts":
+            return <BlockPosts pagination={pagination} path={path} active={active} block={[b]} />;
+          case "block_content":
+            return <BlockContent site={site} block={[b]} />;
+          default:
+            return null;
+        }
+      })
+  }
+</div>

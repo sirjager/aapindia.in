@@ -1,0 +1,69 @@
+---
+import { getImage, type GetPostResult } from "@/db/getPosts";
+import markdoc from "@/lib/markdoc";
+import Image from "@/components/images/QwikImage";
+
+interface Props {
+  post: GetPostResult;
+}
+
+const article = Astro.props.post.post;
+
+let content = article.markdown;
+if (article.editor === "html" && article.html) content = article.html;
+const { html, ...other } = markdoc(content, article.editor);
+
+const post = { ...article, rendered: html, ...other };
+const image = getImage(post.featured, post);
+---
+
+<main>
+  <article
+    role="article"
+    data-pagefind-body
+    class="relative z-10 mx-auto grid max-w-6xl grid-cols-[1fr,min(640px,100%),1fr] gap-y-8 px-4 pb-40 pt-24 lg:grid-cols-[1fr,minmax(auto,240px),min(600px,100%),minmax(auto,240px),1fr] lg:gap-x-6 lg:px-0 [&>*]:col-start-2"
+  >
+    <div class="lg:!col-start-3 lg:!col-end-4">
+      <h1
+        role="heading"
+        data-weight="30"
+        data-pagefind-meta="title"
+        data-pagefind-sort="weight[data-weight]"
+        class:list={[
+          "leading-tighter font-heading text-color-primary font-title mb-8 text-4xl font-bold md:text-5xl",
+        ]}
+      >
+        {post.title}
+      </h1>
+    </div>
+
+    <div class="lg:!col-start-3 lg:!col-end-4">
+      <figure class="w-full">
+        <Image
+          width={959}
+          height={638}
+          src={image.resolved}
+          alt={image.alt}
+          sizes="(max-width: 480px) 100vw, (max-width: 768px) 50vw, 25vw"
+          class:list={["rounded-btn lg:min-h-32"]}
+        />
+      </figure>
+    </div>
+
+    <div class="space-y-8 lg:!col-start-3 lg:!col-end-4">
+      <p class="text-color-secondary font-body text-lg">
+        {post.description}
+      </p>
+    </div>
+
+    <div class="top-0 row-start-2 lg:!col-start-2 lg:!row-start-2">
+      {/* <ArticleInfo post={post} /> */}
+    </div>
+
+    <div id="table-of-content" class="sticky top-0 z-[9999] lg:!col-start-2 lg:row-start-3 lg:h-0">
+      {/* <TableOfContent post={post} initial={toc} /> */}
+    </div>
+
+    <div set:html={post.rendered} class:list={["lg:!col-start-3 lg:!col-end-4", "prose"]} />
+  </article>
+</main>

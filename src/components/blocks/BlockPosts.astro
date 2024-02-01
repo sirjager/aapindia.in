@@ -1,0 +1,145 @@
+---
+import Pagination from "@/components/Pagination.astro";
+import { getImage, postUrl } from "@/db/getPosts";
+import { getBlock, type BlockType } from "@/components/blocks";
+import Link from "@/components/Link.astro";
+import type { BlockPosts } from "@/db/resolved";
+import Image from "@/components/images/QwikImage";
+
+interface Props {
+  active?: number;
+  path?: string;
+  block: BlockType;
+  pagination?: boolean | null;
+}
+
+const { pagination } = Astro.props;
+
+const block = getBlock(Astro.props.block);
+if (block?.__typename !== "block_posts") return null;
+const posts = (block as any)?.posts as BlockPosts | undefined;
+if (!posts) return null;
+
+const isPaginated = pagination && block.pagination && posts.pagination;
+---
+
+<div class="col-span-3 space-y-16">
+  {isPaginated && <Pagination paginate={posts.pagination} />}
+
+  <div class="grid-col-1 grid gap-4 @lg:grid-cols-2 @xl:grid-cols-3 sm:space-y-8">
+    {
+      posts.posts.map((post, index) => {
+        if (!post.slug) return null;
+        const image = getImage(post.featured, post);
+        const href = postUrl(post);
+        const size = index === 0 ? "large" : [1, 5, 10, 17].includes(index) ? "medium" : "small";
+        return (
+          <div
+            class:list={[
+              "rounded-box @container",
+              {
+                "col-span-3 row-span-1": size === "large",
+                "col-span-3 row-span-1 @md:row-span-2 md:col-span-2": size === "medium",
+                "col-span-3 row-span-1 md:col-span-1 md:row-span-1": size === "small",
+              },
+            ]}
+          >
+            {post.headline && (
+              <div>
+                <div set:html={post.headline} />
+              </div>
+            )}
+
+            <Link href={href}>
+              <Image
+                width={958}
+                height={537}
+                src={image.resolved}
+                alt={image.alt}
+                class="rounded-btn"
+              />
+            </Link>
+
+            <Link href={href}>
+              <p class="mt-2 text-pretty font-extrabold @xs:text-2xl @sm:text-2xl @md:text-3xl @lg:text-4xl">
+                {post.title}
+              </p>
+            </Link>
+
+            {post.description && (
+              <p
+                class:list={[
+                  "text-ellipsis text-pretty",
+                  {
+                    "mt-2 line-clamp-4 sm:mt-4 md:text-lg xl:text-xl": size === "large",
+                    "mt-2  line-clamp-3 sm:mt-4 md:text-lg": size === "medium",
+                    "line-clamp-2 hidden max-h-8 text-xs @sm:text-sm sm:mt-2 sm:block sm:max-h-10 md:text-sm":
+                      size === "small",
+                  },
+                ]}
+              >
+                {post.description}
+              </p>
+            )}
+
+            {post.tags && (
+              <div class="relative mt-2 flex flex-wrap items-center gap-2">
+                {post.tags.map((tags) => {
+                  if (!tags?.tags_id) return null;
+                  const { name, slug } = tags.tags_id;
+                  return (
+                    <Link
+                      href={`#tags/${slug}`}
+                      aria-label={`See all articles having tag ${slug}`}
+                      class:list={["group/tag relative flex w-fit items-center p-0.5"]}
+                    >
+                      <span class="absolute bottom-0 h-0.5 w-0 bg-primary transition-all duration-500 ease-in-out group-hover/tag:w-full group-hover/tag:duration-300" />
+
+                      <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M9.39987 5L6.71173 18.7395"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          class="group-hover/tag:storke-accent stroke-primary"
+                        />
+                        <path
+                          d="M19.0972 8.67681L5.09906 8.4458"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          class="group-hover/tag:storke-accent stroke-primary"
+                        />
+                        <path
+                          d="M14 19.1853L16.6881 5.4458"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          class="group-hover/tag:storke-accent stroke-primary"
+                        />
+                        <path
+                          d="M5 14.4451L18.9981 14.6761"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          class="group-hover/tag:storke-accent stroke-primary"
+                        />
+                      </svg>
+                      <p class="relative line-clamp-1 text-xs lowercase group-hover/tag:text-primary sm:text-sm">
+                        {name}
+                      </p>
+                    </Link>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        );
+      })
+    }
+  </div>
+
+  {isPaginated && <Pagination center={true} paginate={posts.pagination} />}
+</div>

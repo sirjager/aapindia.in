@@ -1,0 +1,26 @@
+---
+import { getPage } from "@/db/pages";
+import Root from "@/layouts/Root.astro";
+import Page from "@/components/Page.astro";
+import type { SeoFieldsFragment } from "@/db/graphql";
+import { getSiteInfo } from "@/db/globals";
+
+const [res, site] = await Promise.all([
+  getPage({ filters: { path: { _eq: "/blog" } } }),
+  getSiteInfo(),
+]);
+if (!res) return Astro.redirect("/404");
+
+const page = res.page;
+const { title, description, ...others } = res.page?.seo ?? {};
+const seo: SeoFieldsFragment = {
+  ...others,
+  __typename: "seo",
+  title: title ?? page.title,
+  description: description ?? page.description,
+};
+---
+
+<Root seo={seo}>
+  <Page {...res} site={site} />
+</Root>

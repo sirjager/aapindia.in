@@ -1,0 +1,476 @@
+query FetchGlobal {
+  globals {
+    __typename
+    id
+    date_created
+    date_updated
+    url
+    title
+    tagline
+    description
+    og_image {
+      ...ImageFields
+    }
+    twitter_image {
+      ...ImageFields
+    }
+    social_links
+    street_address
+    address_city
+    address_state
+    address_pincode
+    address_country
+    phone
+    email
+  }
+}
+
+query GetPages(
+  $limit: Int
+  $page: Int
+  $offset: Int
+  $sort: [String]
+  $search: String
+  $filter: pages_filter
+) {
+  pages(
+    limit: $limit
+    offset: $offset
+    page: $page
+    sort: $sort
+    filter: $filter
+    search: $search
+  ) {
+    ...PageFields
+  }
+}
+
+query GetPosts(
+  $limit: Int
+  $page: Int
+  $offset: Int
+  $sort: [String]
+  $search: String
+  $content: Boolean = false
+  $filter: posts_filter
+) {
+  posts(
+    filter: $filter
+    limit: $limit
+    page: $page
+    offset: $offset
+    sort: $sort
+    search: $search
+  ) {
+    ...PostFields
+    editor @include(if: $content)
+    html @include(if: $content)
+    markdown @include(if: $content)
+  }
+}
+
+fragment FaqFields on faqs {
+  __typename
+  id
+  question
+  answer
+}
+
+fragment SeoFields on seo {
+  __typename
+  title
+  priority
+  description
+  noindex
+  nofollow
+  canonical_url
+  change_frequency
+  twitter_image {
+    ...ImageFields
+  }
+  og_image {
+    ...ImageFields
+  }
+}
+
+fragment ImageFields on images {
+  __typename
+  id
+  title
+  alt
+  type
+  caption
+  source
+  description
+  loading
+}
+
+fragment TagFields on tags {
+  id
+  name
+  slug
+}
+
+fragment CategoryFields on categories {
+  id
+  name
+  slug
+}
+
+fragment PostFields on posts {
+  __typename
+  id
+  sort
+  status
+  date_created
+  date_updated
+  date_published
+  slug
+  title
+  headline
+  topic
+  description
+  featured {
+    ...ImageFields
+  }
+  seo {
+    ...SeoFields
+  }
+  tags {
+    tags_id {
+      ...TagFields
+    }
+  }
+  categories {
+    categories_id {
+      ...CategoryFields
+    }
+  }
+  blocks {
+    sort
+    item {
+      ... on block_card {
+        ...BlockCardFields
+      }
+      ... on block_faq {
+        ...BlockFaqFields
+      }
+      ... on block_hero {
+        ...BlockHero
+      }
+      ... on block_button {
+        ...BlockButtonFields
+      }
+      ... on block_image {
+        __typename
+        sort
+        size
+        image {
+          ...ImageFields
+        }
+      }
+      ... on block_content {
+        ...BlockContent
+      }
+      ... on block_quote {
+        ...BlockQuote
+      }
+      ... on block_gallery {
+        ...BlockGallery
+      }
+      ... on block_video {
+        ...BlockVideo
+      }
+      ... on block_posts {
+        ...BlockPosts
+      }
+    }
+  }
+}
+
+fragment BlockCardFields on block_card {
+  __typename
+  id
+  sort
+  href_card: href
+  title_card: title
+  headline
+  description_card: description
+  size
+  variant_card: variant
+  image {
+    ...ImageFields
+  }
+}
+
+fragment BlockButtonFields on block_button {
+  __typename
+  id
+  svg
+  sort
+  size
+  label
+  shape
+  variant
+  disabled
+  align
+  properties
+  href_button: href
+}
+
+fragment BlockFaqFields on block_faq {
+  __typename
+  id
+  sort
+  headline
+  title_faq: title
+  faqs {
+    faqs_id {
+      ...FaqFields
+    }
+  }
+}
+
+fragment BlockHero on block_hero {
+  __typename
+  sort
+  headline
+  title_hero: title
+  description_hero: description
+  buttons {
+    block_button_id {
+      ...BlockButtonFields
+    }
+  }
+}
+
+fragment BlockContent on block_content {
+  __typename
+  id
+  sort
+  html
+  editor
+  headline
+  markdown
+  title_content: title
+}
+
+fragment BlockQuote on block_quote {
+  __typename
+  id
+  sort
+  quote
+  title
+  author
+  about
+}
+
+fragment BlockGallery on block_gallery {
+  __typename
+  id
+  sort
+  title
+  description_gallery: description
+  images {
+    __typename
+    sort
+    images_id {
+      ...ImageFields
+    }
+  }
+}
+
+fragment BlockVideo on block_video {
+  __typename
+  id
+  sort
+  title
+  source
+  headline
+  provider
+  description_video: description
+}
+
+fragment BlockPosts on block_posts {
+  __typename
+  id
+  id
+  sort
+  topic
+  select
+  headline
+  perpage
+  pagination
+  title_cardgroup: title
+  description_cardgroup: description
+}
+
+fragment PageFields on pages {
+  __typename
+  id
+  sort
+  status
+  date_created
+  date_updated
+  title
+  path
+  description
+  pagination
+  seo {
+    ...SeoFields
+  }
+  blocks {
+    sort
+    item {
+      ... on block_card {
+        ...BlockCardFields
+      }
+      ... on block_faq {
+        ...BlockFaqFields
+      }
+      ... on block_hero {
+        ...BlockHero
+      }
+      ... on block_button {
+        ...BlockButtonFields
+      }
+      ... on block_image {
+        __typename
+        sort
+        size
+        image {
+          ...ImageFields
+        }
+      }
+      ... on block_content {
+        ...BlockContent
+      }
+      ... on block_quote {
+        ...BlockQuote
+      }
+      ... on block_gallery {
+        ...BlockGallery
+      }
+      ... on block_video {
+        ...BlockVideo
+      }
+      ... on block_posts {
+        ...BlockPosts
+      }
+    }
+  }
+}
+
+fragment SitemapFields on sitemaps {
+  __typename
+  id
+  sort
+  status
+  date_updated
+  loc
+  size
+  priority
+  collection
+  change_frequency
+  excluded {
+    sort
+    item {
+      ... on posts {
+        __typename
+        status
+        slug
+        topic
+        date_updated
+      }
+      ... on pages {
+        __typename
+        path
+        status
+        date_updated
+      }
+    }
+  }
+  included {
+    sort
+    item {
+      ... on posts {
+        __typename
+        status
+        slug
+        topic
+        date_updated
+      }
+      ... on pages {
+        __typename
+        path
+        status
+        date_updated
+      }
+    }
+  }
+}
+
+query GetSitemaps(
+  $limit: Int
+  $page: Int
+  $offset: Int
+  $sort: [String]
+  $search: String
+  $filter: sitemaps_filter
+) {
+  sitemaps(
+    filter: $filter
+    limit: $limit
+    page: $page
+    offset: $offset
+    sort: $sort
+    search: $search
+  ) {
+    ...SitemapFields
+  }
+}
+
+query GetSitemapPosts(
+  $limit: Int
+  $page: Int
+  $offset: Int
+  $sort: [String]
+  $search: String
+  $filter: posts_filter
+) {
+  posts(
+    filter: $filter
+    limit: $limit
+    page: $page
+    offset: $offset
+    sort: $sort
+    search: $search
+  ) {
+    slug
+    topic
+    status
+    date_updated
+  }
+}
+
+query GetSitemapPages(
+  $limit: Int
+  $page: Int
+  $offset: Int
+  $sort: [String]
+  $search: String
+  $filter: pages_filter
+) {
+  pages(
+    filter: $filter
+    limit: $limit
+    page: $page
+    offset: $offset
+    sort: $sort
+    search: $search
+  ) {
+    path
+    status
+    date_updated
+  }
+}

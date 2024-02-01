@@ -1,0 +1,36 @@
+---
+import Link from "@/components/Link.astro";
+import type { BlockType } from "@/components/blocks";
+import { getBlock } from "@/components/blocks";
+import { cn } from "@/lib/utils";
+
+interface Props {
+  key: number;
+  block: BlockType;
+}
+
+const block = getBlock(Astro.props.block);
+if (block?.__typename !== "block_button") return null;
+
+const properties = ((block.properties || []) as string[]).join(" ");
+const class_ = cn("btn", block.variant, block.size, block.shape, properties);
+const href = block.href_button;
+---
+
+<div class:list={["col-span-3", block.align]}>
+  {
+    href && href.length > 0 ? (
+      <Link href={href}>
+        <button disabled={block.disabled ?? undefined} class={class_}>
+          {block.svg && block.svg.length > 0 && <div />}
+          {block.label}
+        </button>
+      </Link>
+    ) : (
+      <button disabled={block.disabled ?? undefined} class={class_}>
+        {block.svg && block.svg.length > 0 && <div />}
+        {block.label}
+      </button>
+    )
+  }
+</div>

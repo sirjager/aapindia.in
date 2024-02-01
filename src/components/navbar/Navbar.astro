@@ -1,0 +1,44 @@
+---
+import Link from "@/components/Link.astro";
+import { getSiteInfo } from "@/db/globals";
+import ThemeChanger from "@/components/ThemeChanger";
+import { getTopics } from "@/db/getPosts";
+const [topics, info] = await Promise.all([getTopics(), getSiteInfo()]);
+if (!info || !topics) return null;
+---
+
+<div class="navbar mx-auto max-w-6xl bg-base-100 p-4">
+  <div class="navbar-start space-x-2">
+    {
+      topics.map((topic) => (
+        <Link href={`/blog/${topic.slug}`} class="text-lg capitalize">
+          {topic.name}
+        </Link>
+      ))
+    }
+  </div>
+
+  <div class="navbar-center">
+    <Link href="/" class="text-xl">
+      <img src="/logo.svg" class="h-7 sm:h-12" />
+    </Link>
+  </div>
+
+  <div class="navbar-end gap-x-2">
+    <button class="btn btn-ghost btn-sm aspect-square sm:btn-md">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-5 w-5"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        ><path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg
+      >
+    </button>
+    <ThemeChanger />
+  </div>
+</div>

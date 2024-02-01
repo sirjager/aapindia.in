@@ -1,0 +1,96 @@
+---
+import Root from "@/layouts/Root.astro";
+import Page from "@/components/Page.astro";
+import Article from "@/components/Article.astro";
+import type { GetPostResult } from "@/db/getPosts";
+
+import { getPage, getPages, type PageResult } from "@/db/pages";
+import { parseToNumber } from "@/lib/utils";
+import getPosts from "@/db/getPosts";
+import { getPost, getPostsCount } from "@/db/getPosts";
+import { getSiteInfo, type SiteInfo } from "@/db/globals";
+import type { SeoFieldsFragment } from "@/db/graphql";
+
+export const getStaticPaths = async () => {
+  const params: { params: { topic?: string; slug?: string } }[] = [];
+  const data = await Promise.all([getPosts(), getPages()]).catch((_) => {});
+  if (!data) return params;
+  const [posts, pages] = data;
+  if (posts) {
+    posts.posts.forEach((post) => {
+      if (post.topic && post.slug && post.status === "published") {
+        const param = { topic: post.topic, slug: post.slug };
+        params.push({ params: param });
+      }
+    });
+  }
+  if (pages) {
+    for (let p = 0; p < pages.pages.length; p++) {
+      const page = pages.pages[p];
+      if (page.path.startsWith("/blog/")) {
+        if (page.pagination) {
+          const topic = page.path.replace("/blog/", "");
+          if (topic) {
+            const blocks = page.blocks?.filter((b) => b?.item?.__typename === "block_posts");
+            if (blocks?.length === 1) {
+              const block = blocks[0]?.item;
+              if (block?.__typename === "block_posts" && block.perpage) {
+                const limit = block.perpage;
+                const length = await getPostsCount({
+                  filters: { topic: { _eq: topic } },
+                });
+                if (length && length > 0 && limit > 0) {
+                  const total = Math.ceil(length / limit);
+                  for (let i = 1; i <= total; i++) {
+                    const param = { topic: topic, slug: `${i}` };
+                    params.push({ params: param });
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  return params;
+};
+
+const { topic, slug } = Astro.params;
+if (!topic || !slug) return Astro.redirect("/404");
+
+const active = parseToNumber(slug);
+let page: PageResult | undefined = undefined;
+let post: GetPostResult | undefined = undefined;
+let site: SiteInfo | undefined = undefined;
+
+if (typeof active === "number") {
+  const path = "/blog/" + topic;
+  page = await getPage({ page: active, filters: { path: { _eq: path } } });
+  [page, site] = await Promise.all([
+    getPage({ page: active, filters: { path: { _eq: path } } }),
+    getSiteInfo(),
+  ]);
+} else {
+  [post, site] = await Promise.all([
+    getPost({ content: true, filters: { slug: { _eq: slug }, topic: { _eq: topic } } }),
+    getSiteInfo(),
+  ]);
+}
+
+if (!page && !post) {
+  return new Response(null, { status: 404, statusText: "Page Not Found" });
+}
+
+const { title, description, ...others } = page?.page?.seo || post?.post?.seo || {};
+const seo: SeoFieldsFragment = {
+  ...others,
+  __typename: "seo",
+  title: title ?? page?.page.title ?? post?.post.title,
+  description: description ?? page?.page.description ?? post?.post.description,
+};
+---
+
+<Root seo={seo}>
+  {page ? <Page {...page} active={active} site={site} /> : post ? <Article post={post} /> : null}
+</Root>

@@ -1,0 +1,85 @@
+---
+import type { Paginated } from "@/lib/pagination";
+import Link from "./Link.astro";
+
+interface Props {
+  paginate: Paginated;
+  center?: boolean;
+}
+
+const { paginate, center } = Astro.props;
+const { next, prev, range, active, first, last, path } = paginate;
+---
+
+<div
+  class:list={[
+    "flex h-fit items-center justify-center gap-4 @sm:flex-row sm:justify-end",
+    {
+      "sm:justify-center": center,
+    },
+  ]}
+>
+  <Link
+    href={prev || first}
+    role="navigation"
+    aria-label={next ? "go to previous page" : "no previous page"}
+    class:list={[
+      "btn btn-square btn-sm pointer-events-none hidden place-items-center items-center justify-center md:btn-md @sm:flex",
+      {
+        "pointer-events-auto ": prev,
+        "btn-disabled": !prev,
+      },
+    ]}
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" class="h-5 w-5 fill-current">
+      <path
+        d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"
+      ></path></svg
+    >
+  </Link>
+
+  <div class="flex items-center justify-evenly gap-2 sm:gap-4">
+    {
+      range.map((page) =>
+        page === "..." ? (
+          <div role="navigation" class="btn-squre btn btn-sm select-none md:btn-md">
+            {page}
+          </div>
+        ) : (
+          <Link
+            role="navigation"
+            aria-label={page === active ? "already on page" : `jump to page ${page}`}
+            href={page === 1 ? first : `${path}/${page}`}
+            class:list={[
+              "btn btn-square btn-sm md:btn-md",
+              {
+                "btn-accent pointer-events-none": active === page,
+              },
+            ]}
+          >
+            {page}
+          </Link>
+        )
+      )
+    }
+  </div>
+
+  <Link
+    href={next || last}
+    role="navigation"
+    aria-label={next ? "go to next page" : "no next page"}
+    class:list={[
+      "btn btn-square btn-sm pointer-events-none hidden place-items-center items-center justify-center md:btn-md @sm:flex",
+      {
+        "pointer-events-auto ": next,
+        "btn-disabled": !next,
+      },
+    ]}
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" class="h-5 w-5 fill-current">
+      <path
+        d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"
+      ></path></svg
+    >
+  </Link>
+</div>

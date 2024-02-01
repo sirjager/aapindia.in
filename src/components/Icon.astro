@@ -1,0 +1,12 @@
+---
+import { Icon as IconComponent } from "astro-icon/components";
+
+interface Props {
+  name: string;
+  class_?: string;
+}
+
+const { name, class_ = "" } = Astro.props;
+---
+
+<IconComponent name={name} class:list={["h-6 w-6", class_]} />

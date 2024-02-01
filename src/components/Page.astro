@@ -1,0 +1,35 @@
+---
+import type { PageResult } from "@/db/pages";
+import Builder from "@/components/blocks/Builder.astro";
+import PageFind from "@/components/PageFind.astro";
+import type { SiteInfo } from "@/db/globals";
+
+interface Props extends PageResult {
+  active?: number; // page number if any
+  site?: SiteInfo;
+}
+
+const { page, active, site } = Astro.props;
+---
+
+<main
+  class:list={[
+    "mx-auto h-full max-w-6xl overflow-clip",
+    "grid grid-cols-1",
+    "gap-4 p-4 sm:gap-8 sm:p-8",
+    "lg:grid-cols-[minmax(0,1fr),18.75rem]",
+  ]}
+>
+  <div class="col-span-2 mt-12 min-h-[56px]">
+    <PageFind />
+  </div>
+
+  <Builder
+    site={site}
+    active={active}
+    blocks={page.blocks}
+    pagination={page.pagination}
+    path={page.path}
+  />
+  <aside class="space-y-4"></aside>
+</main>

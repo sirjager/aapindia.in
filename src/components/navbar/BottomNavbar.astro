@@ -1,0 +1,44 @@
+---
+import { getTopics } from "@/db/getPosts";
+import TopicsSelector from "./TopicsSelector";
+import Link from "@/components/Link.astro";
+const topics = (await getTopics()) || [];
+---
+
+<div class="fixed bottom-0 left-0 right-0 grid max-h-14 min-h-14 grid-cols-3 sm:hidden">
+  <Link href="/">
+    <button
+      class="btn btn-ghost btn-block flex h-full flex-col items-center justify-center gap-1 rounded-b-none"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-5 w-5"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        ><path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+        ></path></svg
+      >
+      <span class="btm-nav-label">Home</span>
+    </button>
+  </Link>
+
+  <Link href="/search">
+    <button
+      class="btn btn-ghost btn-block flex h-full flex-col items-center justify-center gap-1 rounded-b-none"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="h-5 w-5"
+        ><path
+          d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"
+        ></path></svg
+      >
+      <span class="btm-nav-label">Search</span>
+    </button>
+  </Link>
+
+  <TopicsSelector initial={topics} />
+</div>

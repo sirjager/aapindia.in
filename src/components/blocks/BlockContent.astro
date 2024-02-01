@@ -1,0 +1,24 @@
+---
+import type { BlockType } from "@/components/blocks";
+import { getBlock } from "@/components/blocks";
+import type { SiteInfo } from "@/db/globals";
+import markdoc from "@/lib/markdoc";
+
+interface Props {
+  block: BlockType;
+  site?:SiteInfo
+}
+
+const block = getBlock(Astro.props.block);
+const site = Astro.props.site
+if (block?.__typename !== "block_content") return null;
+if (!block.editor) return null;
+let body = block.markdown;
+if (block.editor === "html" && block.html) body = block.html;
+const { html, ...other } = markdoc(body, block.editor, site);
+const content = { ...block, rendered: html, ...other };
+---
+
+<div class="col-span-3 @container">
+  <div class="prose text-pretty" set:html={content.rendered} />
+</div>
