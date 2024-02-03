@@ -57,12 +57,12 @@ jobs:
         with:
           context: .
           push: true
-          env:
-            PUBLIC_APP_URL: ${{ env.PUBLIC_APP_URL }}
-            GOOGLE_TAG_MANAGER: ${{ env.GOOGLE_TAG_MANAGER }}
-            GOOGLE_SITE_VERIFICATION: ${{ env.GOOGLE_SITE_VERIFICATION }}
-            API_URL: ${{ env.API_URL }}
-            API_TOKEN: ${{ env.API_TOKEN }}
+          build-args: |
+            PUBLIC_APP_URL=${{ env.PUBLIC_APP_URL }}
+            GOOGLE_TAG_MANAGER=${{ env.GOOGLE_TAG_MANAGER }}
+            GOOGLE_SITE_VERIFICATION=${{ env.GOOGLE_SITE_VERIFICATION }}
+            API_URL=${{ env.API_URL }}
+            API_TOKEN=${{ env.API_TOKEN }}
           secrets: |
             PUBLIC_APP_URL=${{ env.PUBLIC_APP_URL }}
             GOOGLE_TAG_MANAGER=${{ env.GOOGLE_TAG_MANAGER }}
