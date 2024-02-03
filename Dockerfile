@@ -25,11 +25,9 @@ RUN npm install --omit=dev
 ## ==============================================
 FROM build-deps AS build
 COPY . .
-
 ENV ASTRO_TELEMETRY_DISABLED=1
-
 RUN npm run build
-# RUN npm run pagefind --site ./dist/client --output-subdir _pagefind
+RUN npm run pagefind --site ./dist/client --output-subdir _pagefind
 ## ==============================================
 
 
