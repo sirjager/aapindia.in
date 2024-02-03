@@ -17,11 +17,11 @@ on:
 env:
   REGISTRY: ghcr.io
   REPOSITORY: ${{ github.repository }}
-  PUBLIC_APP_URL: ${{ secrets.PUBLIC_APP_URL }}
-  API_URL: ${{ secrets.API_URL }}
-  API_TOKEN: ${{ secrets.API_TOKEN }}
-  GOOGLE_TAG_MANAGER: ${{ secrets.GOOGLE_TAG_MANAGER }}
-  GOOGLE_SITE_VERIFICATION: ${{ secrets.GOOGLE_SITE_VERIFICATION }}
+  PUBLIC_APP_URL: "${{ secrets.PUBLIC_APP_URL }}"
+  API_URL: "${{ secrets.API_URL }}"
+  API_TOKEN: "${{ secrets.API_TOKEN }}"
+  GOOGLE_TAG_MANAGER: "${{ secrets.GOOGLE_TAG_MANAGER }}"
+  GOOGLE_SITE_VERIFICATION: "${{ secrets.GOOGLE_SITE_VERIFICATION }}"
 
 
 jobs:
