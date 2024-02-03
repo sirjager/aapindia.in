@@ -63,7 +63,7 @@ jobs:
             - --label=org.opencontainers.image.description=${{ env.REPOSITORY }}
             - --label=org.opencontainers.image.url=https://github.com/${{ env.REPOSITORY }}
             - --label=org.opencontainers.image.source=https://github.com/${{ env.REPOSITORY }}
-          secrets: |
+          build-args: |
             PUBLIC_APP_URL=${{ secrets.PUBLIC_APP_URL }}
             GOOGLE_TAG_MANAGER=${{ secrets.GOOGLE_TAG_MANAGER }}
             GOOGLE_SITE_VERIFICATION=${{ secrets.GOOGLE_SITE_VERIFICATION }}
