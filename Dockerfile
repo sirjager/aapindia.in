@@ -24,7 +24,13 @@ RUN npm install --omit=dev
 ## ==============================================
 FROM build-deps AS build
 COPY . .
+ENV GOOGLE_SITE_VERIFICATION=${GOOGLE_SITE_VERIFICATION}
+ENV GOOGLE_TAG_MANAGER=${GOOGLE_TAG_MANAGER}
+ENV PUBLIC_APP_URL=${PUBLIC_APP_URL}
 ENV ASTRO_TELEMETRY_DISABLED=1
+ENV API_TOKEN=${API_TOKEN}
+ENV API_URL=${API_URL}
+
 RUN npm run build
 RUN npm run pagefind --site ./dist/client --output-subdir _pagefind
 ## ==============================================
