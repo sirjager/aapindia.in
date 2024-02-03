@@ -57,15 +57,15 @@ jobs:
         with:
           context: .
           push: true
+          secrets: |
+            PUBLIC_APP_URL=${{ secrets.PUBLIC_APP_URL }}
+            GOOGLE_TAG_MANAGER=${{ secrets.GOOGLE_TAG_MANAGER }}
+            GOOGLE_SITE_VERIFICATION=${{ secrets.GOOGLE_SITE_VERIFICATION }}
+            API_URL=${{ secrets.API_URL }}
+            API_TOKEN=${{ secrets.API_TOKEN }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: |-
             - --label=org.opencontainers.image.title=${{ env.REPOSITORY }}
             - --label=org.opencontainers.image.description=${{ env.REPOSITORY }}
             - --label=org.opencontainers.image.url=https://github.com/${{ env.REPOSITORY }}
             - --label=org.opencontainers.image.source=https://github.com/${{ env.REPOSITORY }}
-          build-args: |
-            PUBLIC_APP_URL=${{ secrets.PUBLIC_APP_URL }}
-            GOOGLE_TAG_MANAGER=${{ secrets.GOOGLE_TAG_MANAGER }}
-            GOOGLE_SITE_VERIFICATION=${{ secrets.GOOGLE_SITE_VERIFICATION }}
-            API_URL=${{ secrets.API_URL }}
-            API_TOKEN=${{ secrets.API_TOKEN }}
