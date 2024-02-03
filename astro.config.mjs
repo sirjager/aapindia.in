@@ -8,7 +8,6 @@ import icon from "astro-icon";
 import robotsTxt from "astro-robots-txt";
 import { astroImageTools } from "astro-imagetools";
 import Compress from "astro-compress";
-
 const _ = loadEnv(process.env.NODE_ENV, process.cwd(), "");
 const { PUBLIC_APP_URL, NODE_ENV } = _;
 
@@ -23,10 +22,12 @@ export default defineConfig({
   integrations: [
     qwikdev(),
     icon(),
-    astroImageTools,
     tailwind(),
+    astroImageTools,
     partytown(),
-    Compress(),
+    Compress({
+      Image: false,
+    }),
     robotsTxt({
       sitemap: true,
       policy: [
@@ -34,7 +35,6 @@ export default defineConfig({
           userAgent: "*",
           allow: "/",
           disallow: ["/admin"],
-          crawlDelay: 10,
         },
       ],
     }),

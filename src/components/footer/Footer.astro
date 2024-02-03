@@ -3,7 +3,6 @@ import { getFooter, getSocialLinks, getSiteInfo } from "@/db/globals";
 import { getTopics } from "@/db/posts";
 import Link from "@/components/Link.astro";
 import { parseDate } from "@/lib/utils";
-import Image from "@/components/images/QwikImage";
 
 const data = await Promise.all([getSiteInfo(), getTopics(), getFooter(), getSocialLinks()]);
 if (!data) return null;
@@ -17,7 +16,7 @@ const year = parseDate(new Date().toISOString())?.year || new Date().getFullYear
   <div class="grid @2xl:grid-cols-4">
     <div class="col-span-2 flex items-center justify-end p-16">
       <div class="max-w-lg space-y-6">
-        <Image src="/logo.svg" alt={`${site.name} logo`} class="h-12" />
+        <img src="/logo.svg" alt={`${site.name} logo`} class="h-12" />
         <p>{site.description}</p>
       </div>
     </div>

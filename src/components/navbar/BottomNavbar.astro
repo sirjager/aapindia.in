@@ -1,5 +1,5 @@
 ---
-import { getTopics } from "@/db/getPosts";
+import { getTopics } from "@/db/posts";
 import TopicsSelector from "./TopicsSelector";
 import Link from "@/components/Link.astro";
 const topics = (await getTopics()) || [];

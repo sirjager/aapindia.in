@@ -1,0 +1,59 @@
+---
+name: Latest Release
+
+#! [IMPORTANT]
+# TODO: SET GITPAT in Repository secrets
+# TODO: 1. Create Personal Access Token (classic pat) from https://github.com/settings/tokens
+# TODO: 2. check [x] on repo(+including children), workflow, write:packages(+read)
+# TODO: 3. Copy generated token and visit Repository secret : https://github.com/{ogranisation}/{repository}/settings/secrets/actions
+# TODO: 4. Create new repository secret name: GITPAT and secret: paste-generated-token and click Add Secret.
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+env:
+  REGISTRY: ghcr.io
+  REPOSITORY: ${{ github.repository }}
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v2.1.0
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITPAT }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v4.3.0
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.REPOSITORY }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v4.0.0
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: |-
+            - --label=org.opencontainers.image.title=${{ env.REPOSITORY }}
+            - --label=org.opencontainers.image.description=${{ env.REPOSITORY }}
+            - --label=org.opencontainers.image.url=https://github.com/${{ env.REPOSITORY }}
+            - --label=org.opencontainers.image.source=https://github.com/${{ env.REPOSITORY }}

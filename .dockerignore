@@ -1,0 +1,51 @@
+# build output
+dist/
+
+# generated types
+.astro/
+
+# dependencies
+node_modules/
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# macOS-specific files
+.DS_Store
+
+# Temp files and folders
+generated/
+.tmp/
+temp/
+.temp/
+.tmp/
+tmp/
+.tmp*
+*.log
+.vercel
+*.tsbuildinfo
+
+
+# Ignore Pagefind
+_pagefind
+pagefind
+
+# Ignore Python Env files
+.venv
+.venv/
+venv
+venv/
+
+# Ignore cache
+cache/
+.cache/
+
+# Cloudflare
+functions/**/*.js
+
+# GraphqlRc
+.graphqlrc.*
+.graphqlrc*

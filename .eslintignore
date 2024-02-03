@@ -37,10 +37,9 @@ server
 
 # Temp files and folders
 generated/
-.tmp/
-temp/
-.temp/
-.tmp/
+.tmp*
+.temp*
+temp*
 *.log
 .vercel
 
