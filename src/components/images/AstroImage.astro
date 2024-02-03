@@ -1,0 +1,10 @@
+---
+import type { ImgConfigOptions } from "node_modules/astro-imagetools/types";
+import { Img } from "astro-imagetools/components";
+
+interface Props extends ImgConfigOptions {}
+
+const { src, alt, preload = "webp", ...others } = Astro.props;
+---
+
+<Img src={src} alt={alt} preload={preload} {...others} />

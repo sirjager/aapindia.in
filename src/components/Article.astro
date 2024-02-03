@@ -1,10 +1,10 @@
 ---
-import { getImage, type GetPostResult } from "@/db/getPosts";
+import { getImage, type PostResult } from "@/db/posts";
 import markdoc from "@/lib/markdoc";
-import Image from "@/components/images/QwikImage";
+import Image from "@/components/images/AstroImage.astro";
 
 interface Props {
-  post: GetPostResult;
+  post: PostResult;
 }
 
 const article = Astro.props.post.post;
@@ -38,32 +38,34 @@ const image = getImage(post.featured, post);
     </div>
 
     <div class="lg:!col-start-3 lg:!col-end-4">
-      <figure class="w-full">
+      <figure class="overflow-clip rounded-box">
         <Image
           width={959}
           height={638}
           src={image.resolved}
-          alt={image.alt}
+          alt={image.alt ?? post.title}
           sizes="(max-width: 480px) 100vw, (max-width: 768px) 50vw, 25vw"
-          class:list={["rounded-btn lg:min-h-32"]}
         />
       </figure>
-    </div>
 
-    <div class="space-y-8 lg:!col-start-3 lg:!col-end-4">
-      <p class="text-color-secondary font-body text-lg">
-        {post.description}
-      </p>
-    </div>
+      <div class="space-y-8 lg:!col-start-3 lg:!col-end-4">
+        <p class="text-color-secondary font-body text-lg">
+          {post.description}
+        </p>
+      </div>
 
-    <div class="top-0 row-start-2 lg:!col-start-2 lg:!row-start-2">
-      {/* <ArticleInfo post={post} /> */}
-    </div>
+      <div class="top-0 row-start-2 lg:!col-start-2 lg:!row-start-2">
+        {/* <ArticleInfo post={post} /> */}
+      </div>
 
-    <div id="table-of-content" class="sticky top-0 z-[9999] lg:!col-start-2 lg:row-start-3 lg:h-0">
-      {/* <TableOfContent post={post} initial={toc} /> */}
-    </div>
+      <div
+        id="table-of-content"
+        class="sticky top-0 z-[9999] lg:!col-start-2 lg:row-start-3 lg:h-0"
+      >
+        {/* <TableOfContent post={post} initial={toc} /> */}
+      </div>
 
-    <div set:html={post.rendered} class:list={["lg:!col-start-3 lg:!col-end-4", "prose"]} />
+      <div set:html={post.rendered} class:list={["lg:!col-start-3 lg:!col-end-4", "prose"]} />
+    </div>
   </article>
 </main>

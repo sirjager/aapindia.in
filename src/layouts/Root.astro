@@ -6,12 +6,14 @@ import Footer from "@/components/footer/Footer.astro";
 import SEO from "@/layouts/SEO.astro";
 import BodyScripts from "@/layouts/BodyScripts.astro";
 import type { SeoFieldsFragment } from "@/db/graphql";
+import type { SiteInfo } from "@/db/globals";
 
 interface Props {
   seo?: SeoFieldsFragment | null;
+  site: SiteInfo;
 }
 
-const { seo } = Astro.props;
+const { seo, site } = Astro.props;
 ---
 
 <!doctype html>
@@ -21,7 +23,7 @@ const { seo } = Astro.props;
     <SEO seo={seo} />
   </head>
   <body>
-    <Navbar />
+    <Navbar site={site} />
     <slot />
     <Footer />
     <BodyScripts />

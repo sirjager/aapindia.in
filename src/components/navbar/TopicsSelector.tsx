@@ -1,4 +1,4 @@
-import { getTopics, type Topic } from "@/db/getPosts";
+import { getTopics, type Topic } from "@/db/posts";
 import { component$, $, useStore, useTask$ } from "@builder.io/qwik";
 
 interface Props {

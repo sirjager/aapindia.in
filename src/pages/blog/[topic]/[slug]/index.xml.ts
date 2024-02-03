@@ -1,10 +1,9 @@
 /* eslint-disable quotes */
-import { getPostsCount } from "@/db/getPosts";
+import { getPostsCount } from "@/db/posts";
 import { getSitemapPosts } from "@/db/getSitemaps";
 import { getTopics } from "@/db/posts";
 import { parseToNumber } from "@/lib/utils";
 import type { APIRoute } from "astro";
-
 
 export const getStaticPaths = async () => {
   const topics = (await getTopics()) || [];

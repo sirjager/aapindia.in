@@ -1,10 +1,10 @@
 ---
 import Pagination from "@/components/Pagination.astro";
-import { getImage, postUrl } from "@/db/getPosts";
+import { getImage, postUrl } from "@/db/posts";
 import { getBlock, type BlockType } from "@/components/blocks";
 import Link from "@/components/Link.astro";
 import type { BlockPosts } from "@/db/resolved";
-import Image from "@/components/images/QwikImage";
+import Image from "@/components/images/AstroPicture.astro";
 
 interface Props {
   active?: number;
@@ -50,17 +50,18 @@ const isPaginated = pagination && block.pagination && posts.pagination;
               </div>
             )}
 
-            <Link href={href}>
-              <Image
-                width={958}
-                height={537}
-                src={image.resolved}
-                alt={image.alt}
-                class="rounded-btn"
-              />
+            <Link href={href} aria-label={`Read more about ${post.title}`}>
+              <figure class="overflow-clip rounded-box">
+                <Image
+                  width={958}
+                  height={537}
+                  src={image.resolved}
+                  alt={image.alt ?? post.title}
+                />
+              </figure>
             </Link>
 
-            <Link href={href}>
+            <Link href={href} aria-label={`Read more about ${post.title}`}>
               <p class="mt-2 text-pretty font-extrabold @xs:text-2xl @sm:text-2xl @md:text-3xl @lg:text-4xl">
                 {post.title}
               </p>
@@ -91,44 +92,14 @@ const isPaginated = pagination && block.pagination && posts.pagination;
                     <Link
                       href={`#tags/${slug}`}
                       aria-label={`See all articles having tag ${slug}`}
-                      class:list={["group/tag relative flex w-fit items-center p-0.5"]}
+                      class:list={[
+                        "group/tag btn glass btn-xs relative line-clamp-1 flex w-fit items-center p-0.5",
+                      ]}
                     >
                       <span class="absolute bottom-0 h-0.5 w-0 bg-primary transition-all duration-500 ease-in-out group-hover/tag:w-full group-hover/tag:duration-300" />
 
-                      <svg
-                        width="20"
-                        height="20"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M9.39987 5L6.71173 18.7395"
-                          stroke-width="1.5"
-                          stroke-linecap="round"
-                          class="group-hover/tag:storke-accent stroke-primary"
-                        />
-                        <path
-                          d="M19.0972 8.67681L5.09906 8.4458"
-                          stroke-width="1.5"
-                          stroke-linecap="round"
-                          class="group-hover/tag:storke-accent stroke-primary"
-                        />
-                        <path
-                          d="M14 19.1853L16.6881 5.4458"
-                          stroke-width="1.5"
-                          stroke-linecap="round"
-                          class="group-hover/tag:storke-accent stroke-primary"
-                        />
-                        <path
-                          d="M5 14.4451L18.9981 14.6761"
-                          stroke-width="1.5"
-                          stroke-linecap="round"
-                          class="group-hover/tag:storke-accent stroke-primary"
-                        />
-                      </svg>
-                      <p class="relative line-clamp-1 text-xs lowercase group-hover/tag:text-primary sm:text-sm">
-                        {name}
+                      <p class="relative line-clamp-1 scale-90 px-1 text-xs lowercase group-hover/tag:text-primary sm:text-sm">
+                        #{name}
                       </p>
                     </Link>
                   );

@@ -2,7 +2,7 @@ import directus from "@/db/directus";
 
 export interface SiteInfo {
   url: string;
-  title: string;
+  name: string;
   tagline: string;
   description: string;
 }
@@ -16,7 +16,6 @@ export async function getSiteInfo() {
     return info;
   }
 }
-
 
 interface SocialLink {
   service: string;
@@ -33,7 +32,6 @@ export async function getSocialLinks() {
     return socials;
   }
 }
-
 
 interface FooterSection {
   title: string;

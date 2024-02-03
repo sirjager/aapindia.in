@@ -1,0 +1,10 @@
+---
+import type { PictureConfigOptions } from "node_modules/astro-imagetools/types";
+import { Picture } from "astro-imagetools/components";
+
+interface Props extends PictureConfigOptions {}
+
+const { src, alt, ...others } = Astro.props;
+---
+
+<Picture src={src} alt={alt} {...others} />

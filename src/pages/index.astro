@@ -11,7 +11,7 @@ const [res, site] = await Promise.all([
   getPage({ filters: { path: { _eq: path } } }),
   getSiteInfo(),
 ]);
-if (!res) return Astro.redirect("/404");
+if (!res || !site) return Astro.redirect("/404");
 
 const page = res.page;
 const { title, description, ...others } = res.page?.seo ?? {};
@@ -23,6 +23,6 @@ const seo: SeoFieldsFragment = {
 };
 ---
 
-<Root seo={seo}>
+<Root seo={seo} site={site}>
   <Page {...res} site={site} />
 </Root>

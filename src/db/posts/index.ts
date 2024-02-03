@@ -105,14 +105,14 @@ export function getImage(pic?: ImageFieldsFragment | null, post?: Post): Picture
     resolved: `https://picsum.photos/seed/${post?.id}/640/360`,
   };
 
-  if (pic?.source?.startsWith("https://drive.google.com/file/d/")) {
-    const ids = pic.source.replaceAll("https://drive.google.com/file/d/", "");
-    const imageID = ids.split("/")[0];
-    if (imageID) {
-      picture.resolved = `https://drive.google.com/uc?export=view&id=${imageID}`;
-      return picture;
-    }
-  }
+  // if (pic?.source?.startsWith("https://drive.google.com/file/d/")) {
+  //   const ids = pic.source.replaceAll("https://drive.google.com/file/d/", "");
+  //   const imageID = ids.split("/")[0];
+  //   if (imageID) {
+  //     picture.resolved = `https://drive.google.com/uc?export=view&id=${imageID}`;
+  //     return picture;
+  //   }
+  // }
 
   return picture;
 }

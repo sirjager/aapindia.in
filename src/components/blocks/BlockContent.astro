@@ -6,11 +6,11 @@ import markdoc from "@/lib/markdoc";
 
 interface Props {
   block: BlockType;
-  site?:SiteInfo
+  site?: SiteInfo;
 }
 
 const block = getBlock(Astro.props.block);
-const site = Astro.props.site
+const site = Astro.props.site;
 if (block?.__typename !== "block_content") return null;
 if (!block.editor) return null;
 let body = block.markdown;

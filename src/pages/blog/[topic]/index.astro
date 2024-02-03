@@ -4,6 +4,7 @@ import Root from "@/layouts/Root.astro";
 import Page from "@/components/Page.astro";
 import { getTopics } from "@/db/posts";
 import type { SeoFieldsFragment } from "@/db/graphql";
+import { getSiteInfo } from "@/db/globals";
 
 export const getStaticPaths = async () => {
   const topics = await getTopics();
@@ -15,8 +16,13 @@ export const getStaticPaths = async () => {
 
 const { topic } = Astro.params;
 if (!topic) return Astro.redirect("/404");
-const res = await getPage({ filters: { path: { _eq: "/blog/" + topic } } });
-if (!res) return Astro.redirect("/404");
+
+const [res, site] = await Promise.all([
+  getPage({ filters: { path: { _eq: "/blog/" + topic } } }),
+  getSiteInfo(),
+]);
+
+if (!res || !site) return Astro.redirect("/404");
 
 const page = res.page;
 const { title, description, ...others } = res.page?.seo ?? {};
@@ -28,6 +34,6 @@ const seo: SeoFieldsFragment = {
 };
 ---
 
-<Root seo={seo}>
+<Root seo={seo} site={site}>
   <Page {...res} />
 </Root>

@@ -5,7 +5,7 @@ import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import Markdoc from "@markdoc/markdoc";
 import readingTime from "reading-time";
-import type { SiteInfo } from "@/db/getPages";
+import type { SiteInfo } from "@/db/globals";
 
 export interface Heading {
   id: string;

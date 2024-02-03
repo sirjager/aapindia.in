@@ -1,6 +1,7 @@
 import type { GetPagesQuery, Pages_Filter } from "@/db/graphql";
 import { client, GetPagesDocument } from "@/db/graphql";
 import { pageResolver } from "./resolver";
+export type { BlockPosts } from "./resolver";
 
 interface getPagesOpts {
   page?: number | null;
@@ -47,7 +48,6 @@ export async function getPages(opts?: getPagesOpts) {
   return result;
 }
 
-
 interface getPagesOpts {
   page?: number | null;
   limit?: number | null;
@@ -74,5 +74,5 @@ export async function getPage(opts?: getPagesOpts) {
     path: data.path,
     number: data.number,
   };
-  return pageResolver(result)
+  return pageResolver(result);
 }

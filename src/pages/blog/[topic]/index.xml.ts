@@ -1,5 +1,5 @@
 /* eslint-disable quotes */
-import { getPostsCount } from "@/db/getPosts";
+import { getPostsCount } from "@/db/posts";
 import { getTopics } from "@/db/posts";
 import type { APIRoute } from "astro";
 

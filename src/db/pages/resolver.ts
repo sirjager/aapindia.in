@@ -1,5 +1,5 @@
 import type { PageResult, Page } from ".";
-import getPosts, { type Post, getPostsCount } from "@/db/getPosts";
+import getPosts, { type Post, getPostsCount } from "@/db/posts";
 import { type Paginated, paginate } from "@/lib/pagination";
 
 export interface BlockPosts {

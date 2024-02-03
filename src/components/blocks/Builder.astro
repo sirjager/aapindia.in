@@ -7,12 +7,12 @@ import type { SiteInfo } from "@/db/globals";
 
 interface Props {
   path?: string;
-  blocks: PageResult["page"]["blocks"]
+  blocks: PageResult["page"]["blocks"];
   active?: number;
   pagination?: boolean | null;
-  site?:SiteInfo
+  site?: SiteInfo;
 }
-const { blocks, path, active, pagination,site } = Astro.props;
+const { blocks, path, active, pagination, site } = Astro.props;
 ---
 
 <div class="grid grid-cols-3 gap-2 @container sm:gap-3 md:gap-4 lg:gap-6">

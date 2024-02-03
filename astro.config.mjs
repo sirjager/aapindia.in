@@ -2,12 +2,12 @@ import { defineConfig } from "astro/config";
 import qwikdev from "@qwikdev/astro";
 import tailwind from "@astrojs/tailwind";
 import { loadEnv } from "vite";
-import metaTags from "astro-meta-tags";
 import partytown from "@astrojs/partytown";
 import node from "@astrojs/node";
 import icon from "astro-icon";
 import robotsTxt from "astro-robots-txt";
 import { astroImageTools } from "astro-imagetools";
+import Compress from "astro-compress";
 
 const _ = loadEnv(process.env.NODE_ENV, process.cwd(), "");
 const { PUBLIC_APP_URL, NODE_ENV } = _;
@@ -22,11 +22,11 @@ export default defineConfig({
   },
   integrations: [
     qwikdev(),
-    metaTags(),
     icon(),
     astroImageTools,
     tailwind(),
     partytown(),
+    Compress(),
     robotsTxt({
       sitemap: true,
       policy: [

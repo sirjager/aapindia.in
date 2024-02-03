@@ -2,12 +2,12 @@
 import Root from "@/layouts/Root.astro";
 import Page from "@/components/Page.astro";
 import Article from "@/components/Article.astro";
-import type { GetPostResult } from "@/db/getPosts";
+import type { PostResult } from "@/db/posts";
 
 import { getPage, getPages, type PageResult } from "@/db/pages";
 import { parseToNumber } from "@/lib/utils";
-import getPosts from "@/db/getPosts";
-import { getPost, getPostsCount } from "@/db/getPosts";
+import getPosts from "@/db/posts";
+import { getPost, getPostsCount } from "@/db/posts";
 import { getSiteInfo, type SiteInfo } from "@/db/globals";
 import type { SeoFieldsFragment } from "@/db/graphql";
 
@@ -61,7 +61,7 @@ if (!topic || !slug) return Astro.redirect("/404");
 
 const active = parseToNumber(slug);
 let page: PageResult | undefined = undefined;
-let post: GetPostResult | undefined = undefined;
+let post: PostResult | undefined = undefined;
 let site: SiteInfo | undefined = undefined;
 
 if (typeof active === "number") {
@@ -78,9 +78,8 @@ if (typeof active === "number") {
   ]);
 }
 
-if (!page && !post) {
-  return new Response(null, { status: 404, statusText: "Page Not Found" });
-}
+if (!site) return Astro.redirect("/404");
+if (!page && !post) return Astro.redirect("/404");
 
 const { title, description, ...others } = page?.page?.seo || post?.post?.seo || {};
 const seo: SeoFieldsFragment = {
@@ -91,6 +90,6 @@ const seo: SeoFieldsFragment = {
 };
 ---
 
-<Root seo={seo}>
+<Root seo={seo} site={site}>
   {page ? <Page {...page} active={active} site={site} /> : post ? <Article post={post} /> : null}
 </Root>
