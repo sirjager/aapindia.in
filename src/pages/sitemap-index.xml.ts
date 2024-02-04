@@ -2,13 +2,9 @@ import type { APIRoute } from "astro";
 
 const urlSet = ({ loc }: { loc: string }) => {
   const lastmod = new Date().toISOString();
-  const freq = "weekly";
-  const priority = 0.7;
   return `<sitemap>
           <loc>${loc}</loc>
           <lastmod>${lastmod}</lastmod>
-          <changefreq>${freq}</changefreq>
-          <priority>${priority}</priority>
         </sitemap>`;
 };
 

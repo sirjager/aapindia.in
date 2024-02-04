@@ -6,6 +6,7 @@
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro check && astro build",
+    "postbuild": "npm run pagefind",
     "preview": "astro preview",
     "astro": "astro",
     "format": "prettier --write . && tsc --incremental --pretty --noemit && prettier --check . && eslint src/ --fix",
