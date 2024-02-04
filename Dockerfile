@@ -1,4 +1,3 @@
-# syntax = docker/dockerfile:1
 ## ==============================================
 FROM node:21-slim AS base
 WORKDIR /app

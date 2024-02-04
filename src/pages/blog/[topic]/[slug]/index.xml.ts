@@ -26,7 +26,8 @@ export const GET: APIRoute = async (req) => {
   if (!topic || !slug) return new Response(null, { status: 404 });
 
   const sets: string[] = [];
-  sets.push('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">');
+  sets.push(`<?xml version="1.0" encoding="UTF-8"?>`);
+  sets.push(`<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">`);
 
   const limit = 1000;
   const page = parseToNumber(slug.replace("page-", "")) || 1;
@@ -36,19 +37,17 @@ export const GET: APIRoute = async (req) => {
     for (let i = 0; i < posts.posts.length; i++) {
       const post = posts.posts[i];
       const lastmod = post.date_updated ?? new Date().toISOString();
-      const string = `
-        <url>
-          <loc>${baseURL}/blog/${topic}/${post.slug}</loc>
-          <lastmod>${lastmod}</lastmod>
-          <changefreq>weekly</changefreq>
-          <priority>0.7</priority>
-        </url>`;
+      const loc = `${baseURL}/blog/${topic}/${post.slug}`;
+      const string = `<url><loc>${loc}</loc><lastmod>${lastmod}</lastmod></url>`;
       sets.push(string);
     }
   }
 
   sets.push("</urlset>");
   const sitemapData = sets.join("\n");
-  const headers = { "Content-Type": "text/xml; charset=UTF-8" };
+  const headers = {
+    "Content-Type": "text/xml; charset=UTF-8",
+    "Cache-Control": "no-cache, no-store, must-revalidate, max-age=0",
+  };
   return new Response(sitemapData, { status: 200, headers });
 };
