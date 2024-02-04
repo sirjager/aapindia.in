@@ -1,6 +1,7 @@
 /* eslint-disable quotes */
-import { getPostsCount } from "@/db/posts";
+import { getSitemapPosts } from "@/db/getSitemaps";
 import { getTopics } from "@/db/posts";
+import { SITEMAP_SIZE } from "@/lib/constants";
 import type { APIRoute } from "astro";
 
 export const getStaticPaths = async () => {
@@ -18,20 +19,28 @@ export const GET: APIRoute = async (req) => {
 
   const sets: string[] = [];
   sets.push(`<?xml version="1.0" encoding="UTF-8"?>`);
-  sets.push('<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">');
+  sets.push('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">');
 
-  const limit = 1000;
-  const total = (await getPostsCount({ limit, filters: { topic: { _eq: topic } } })) || 0;
-  const pages = Math.ceil(total / limit);
-
-  for (let i = 1; i <= pages; i++) {
-    const loc = `${baseURL}/blog/${topic}/page-${i}.xml`;
-    const lastmod = new Date().toISOString();
-    const string = `<sitemap><loc>${loc}</loc><lastmod>${lastmod}</lastmod></sitemap>`;
+  const limit = SITEMAP_SIZE;
+  const posts = await getSitemapPosts({ limit, filters: { topic: { _eq: topic } } });
+  if (!posts) return new Response(null, { status: 404 });
+  for (let i = 0; i < posts.posts.length; i++) {
+    const post = posts.posts[i];
+    const loc = `${baseURL}/blog/${post.topic}/${post.slug}`;
+    const lastmod = post.date_updated ?? new Date().toISOString();
+    const changefreq = "weekly";
+    const priority = 0.7;
+    const string = `
+      <url>
+        <loc>${loc}</loc>
+        <lastmod>${lastmod}</lastmod>
+        <changefreq>${changefreq}</changefreq>
+        <priority>${priority}</priority>
+      </url>`;
     sets.push(string);
   }
 
-  sets.push("</sitemapindex>");
+  sets.push("</urlset>");
   const sitemapData = sets.join("\n");
   const headers = {
     "Content-Type": "text/xml; charset=UTF-8",
