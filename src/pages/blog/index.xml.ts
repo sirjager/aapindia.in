@@ -17,7 +17,6 @@ const urlSet = ({ loc }: { loc: string }) => {
 export const GET: APIRoute = async (req) => {
   const baseURL = req.url.origin;
   const sets: string[] = [];
-  sets.push('<xml version="1.0" encoding="UTF-8">');
   sets.push('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">');
 
   const topics = (await getTopics()) || [];
@@ -27,7 +26,6 @@ export const GET: APIRoute = async (req) => {
   });
 
   sets.push("</urlset>");
-  sets.push("</xml>");
   const sitemapData = sets.join("\n");
   const headers = { "Content-Type": "text/xml; charset=UTF-8" };
   return new Response(sitemapData, { status: 200, headers });

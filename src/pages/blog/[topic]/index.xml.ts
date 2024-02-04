@@ -29,7 +29,6 @@ export const GET: APIRoute = async (req) => {
   if (!topic) return new Response(null, { status: 404 });
 
   const sets: string[] = [];
-  sets.push('<xml version="1.0" encoding="UTF-8">');
   sets.push('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">');
 
   const limit = 1000;
@@ -42,7 +41,6 @@ export const GET: APIRoute = async (req) => {
   }
 
   sets.push("</urlset>");
-  sets.push("</xml>");
   const sitemapData = sets.join("\n");
   const headers = { "Content-Type": "text/xml; charset=UTF-8" };
   return new Response(sitemapData, { status: 200, headers });

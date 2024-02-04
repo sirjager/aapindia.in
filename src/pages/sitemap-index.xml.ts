@@ -13,7 +13,6 @@ export const GET: APIRoute = async (req) => {
   const sets: string[] = [];
   // eslint-disable-next-line quotes
   sets.push(`<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">`);
-  sets.push(urlSet({ loc: baseURL }));
   sets.push(urlSet({ loc: `${baseURL}/blog.xml` }));
   sets.push("</sitemapindex>");
   const sitemapData = sets.join("\n");
