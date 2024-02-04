@@ -4,12 +4,12 @@ const urlSet = ({ loc }: { loc: string }) => {
   const lastmod = new Date().toISOString();
   const freq = "weekly";
   const priority = 0.7;
-  return `<url>
+  return `<sitemap>
           <loc>${loc}</loc>
           <lastmod>${lastmod}</lastmod>
           <changefreq>${freq}</changefreq>
           <priority>${priority}</priority>
-        </url>`;
+        </sitemap>`;
 };
 
 export const GET: APIRoute = async (req) => {

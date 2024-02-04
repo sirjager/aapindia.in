@@ -29,7 +29,7 @@ export default defineConfig({
       Image: false,
     }),
     robotsTxt({
-      sitemap: true,
+      sitemap: `${PUBLIC_APP_URL}/sitemap-index.xml`,
       policy: [
         {
           userAgent: "*",
