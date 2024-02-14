@@ -33,7 +33,6 @@ export default defineConfig({
       policy: [
         {
           userAgent: "*",
-          allow: "/",
           disallow: ["/admin"],
         },
       ],
